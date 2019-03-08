@@ -1,0 +1,93 @@
+[
+	{
+		"type": "section",
+		"text": {
+			"type": "mrkdwn",
+			"text": "Hello #{username}! Thanks for requesting a feedback for #{username2}. In order to process your request I need some more data and a confirmation.\n\n *Below find a list of people with whom this person worked with*:"
+		}
+	},
+	{
+		"type": "divider"
+	},
+	{
+		"type": "section",
+		"text": {
+			"type": "mrkdwn",
+			"text": "*Project1*\n Person1 (@user1)\n Person2 (@user2)\n\n*Project2*\n Person3 (@user3)\n Person4 (@user4)\n"
+		}
+	},
+	{
+		"type": "divider"
+	},
+    {
+		"type": "section",
+		"text": {
+			"type": "mrkdwn",
+			"text": "Do you want to *_exclude_* anyone? If yes, please, pick their name below:"
+		}
+	},
+	{
+		"type": "actions",
+		"elements": [
+			{
+				"type": "button",
+				"text": {
+					"type": "plain_text",
+					"text": "Person1",
+					"emoji": true
+				},
+				"value": "person_1"
+			},
+			{
+				"type": "button",
+				"text": {
+					"type": "plain_text",
+					"text": "Person2",
+					"emoji": true
+				},
+				"value": "person_2"
+			},
+			{
+				"type": "button",
+				"text": {
+					"type": "plain_text",
+					"text": "Person3",
+					"emoji": true
+				},
+				"value": "person_3"
+			}
+		]
+	},
+	{
+		"type": "section",
+		"text": {
+			"type": "mrkdwn",
+			"text": "Pick a face to face date"
+		},
+		"accessory": {
+			"type": "datepicker",
+			"initial_date": "1990-04-28",
+			"placeholder": {
+				"type": "plain_text",
+				"text": "Select a date",
+				"emoji": true
+			}
+		}
+	},
+	{
+		"type": "section",
+		"text": {
+			"type": "mrkdwn",
+			"text": "Pick a date to setup reminder"
+		},
+		"accessory": {
+			"type": "datepicker",
+			"initial_date": "1990-04-28",
+			"placeholder": {
+				"type": "plain_text",
+				"text": "Select a date",
+				"emoji": true
+			}
+		}
+	}
+]
