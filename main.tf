@@ -72,8 +72,25 @@ resource "aws_api_gateway_integration" "slack_integration" {
   resource_id             = "${aws_api_gateway_resource.slack.id}"
   http_method             = "${aws_api_gateway_method.slack_post.http_method}"
   integration_http_method = "POST"
-  type                    = "AWS_PROXY"
+  type                    = "AWS"
   uri                     = "arn:aws:apigateway:${var.aws_region}:lambda:path/2015-03-31/functions/${module.lambda.lambda_arn}/invocations"
+}
+resource "aws_api_gateway_method_response" "slack_response" {
+  rest_api_id = "${aws_api_gateway_rest_api.feedbot.id}"
+  resource_id = "${aws_api_gateway_resource.slack.id}"
+  http_method = "${aws_api_gateway_method.slack_post.http_method}"
+  status_code = "200"
+  response_models = { "application/json" = "Empty" }
+}
+resource "aws_api_gateway_integration_response" "slack_integration_response" {
+  rest_api_id = "${aws_api_gateway_rest_api.feedbot.id}"
+  resource_id = "${aws_api_gateway_resource.slack.id}"
+  http_method = "${aws_api_gateway_method.slack_post.http_method}"
+  status_code = "${aws_api_gateway_method_response.slack_response.status_code}"
+  response_templates { "application/json" = "" }
+  depends_on = [
+    "aws_api_gateway_integration.slack_integration"
+  ]
 }
 resource "aws_api_gateway_resource" "forms" {
   rest_api_id = "${aws_api_gateway_rest_api.feedbot.id}"
@@ -91,11 +108,33 @@ resource "aws_api_gateway_integration" "forms_integration" {
   resource_id             = "${aws_api_gateway_resource.forms.id}"
   http_method             = "${aws_api_gateway_method.forms_post.http_method}"
   integration_http_method = "POST"
-  type                    = "AWS_PROXY"
+  type                    = "AWS"
   uri                     = "arn:aws:apigateway:${var.aws_region}:lambda:path/2015-03-31/functions/${module.lambda.lambda_arn}/invocations"
 }
+resource "aws_api_gateway_method_response" "forms_response" {
+  rest_api_id = "${aws_api_gateway_rest_api.feedbot.id}"
+  resource_id = "${aws_api_gateway_resource.forms.id}"
+  http_method = "${aws_api_gateway_method.forms_post.http_method}"
+  status_code = "200"
+  response_models = { "application/json" = "Empty" }
+}
+resource "aws_api_gateway_integration_response" "forms_integration_response" {
+  rest_api_id = "${aws_api_gateway_rest_api.feedbot.id}"
+  resource_id = "${aws_api_gateway_resource.forms.id}"
+  http_method = "${aws_api_gateway_method.forms_post.http_method}"
+  status_code = "${aws_api_gateway_method_response.forms_response.status_code}"
+  response_templates { "application/json" = "" }
+  depends_on = [
+    "aws_api_gateway_integration.forms_integration"
+  ]
+}
 resource "aws_api_gateway_deployment" "api_deployment" {
-  depends_on = ["aws_api_gateway_integration.forms_integration", "aws_api_gateway_integration.slack_integration"]
+  depends_on = [
+    "aws_api_gateway_integration.forms_integration",
+    "aws_api_gateway_integration_response.forms_integration_response",
+    "aws_api_gateway_integration.slack_integration",
+    "aws_api_gateway_integration_response.slack_integration_response"
+    ]
 
   rest_api_id = "${aws_api_gateway_rest_api.feedbot.id}"
   stage_name  = "prod"
