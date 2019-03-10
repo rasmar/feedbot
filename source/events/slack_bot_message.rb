@@ -1,10 +1,7 @@
 # frozen_string_literal: true
 
 module Events
-  class FormSubmit
-    def initialize(attributes)
-    end
-
+  class SlackUnknownMessage
     def process
       false
     end

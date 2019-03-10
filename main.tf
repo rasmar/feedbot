@@ -39,7 +39,7 @@ module "lambda" {
   lambda_function_name               = "feedBot"
   lambda_description                 = "feedBot main lambda"
   lambda_runtime                     = "ruby2.5"
-  lambda_handler                     = "main.interact"
+  lambda_handler                     = "main.FeedBot::EventHandler.handle"
   lambda_timeout                     = 30
   lambda_code_s3_bucket_use_existing = "true"
   lambda_code_s3_bucket_existing     = "${module.s3_bucket.bucket_id}"
