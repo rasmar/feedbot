@@ -1,0 +1,21 @@
+{
+  "token": "token",
+  "team_id": "team_id",
+  "api_app_id": "api_pp_id",
+  "event": {
+    "client_msg_id": "client_msg_id",
+    "type": "message",
+    "text": "list",
+    "user": "user_id",
+    "ts": "1552245349.002000",
+    "channel": "channel",
+    "event_ts": "1552245349.002000",
+    "channel_type": "im"
+  },
+  "type": "event_callback",
+  "event_id": "event_id",
+  "event_time": 1552245349,
+  "authed_users": [
+    "authed_user1"
+  ]
+}
