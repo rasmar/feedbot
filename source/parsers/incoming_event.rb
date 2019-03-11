@@ -30,7 +30,10 @@ module Parsers
     end
 
     def parse_slack_event
-      @command, @requested_for, @message = event["text"]&.match(/([a-z]+) (@[^ ]+) (.*)/i)&.captures
+      text = event["text"]
+      @command = text.match(/^[a-z]+/).to_s
+      @requested_for = text.match(/(?<=\w )[^ ]+/).to_s
+      @message = text.match(/^([^ ]+) ([^ ]+) (.*$)/)&.captures&.last
     end
 
     def slack_event?
