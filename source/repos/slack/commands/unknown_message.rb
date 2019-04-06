@@ -14,26 +14,34 @@ module Repos
       def payload
         {
           blocks: [
-            {
-              type: "section",
-              text: {
-                type: "mrkdwn",
-                text: "I'm sorry but I can't understand you. What do you need? Try one of these:"
-              }
-            },
-            {
-              type: "divider"
-            },
-            {
-              type: "section",
-              text: {
-                type: "mrkdwn",
-                text: "*status `@username`* - displays a status of feedback request that was requested for specific user\n*list* - displays a list of feedback requests that you've received\n*request `@username` Message to be sent* - requests a feedback for specific user"
-              }
-            },
+            info_section,
+            divider,
+            commands_section
           ],
           channel: channel
-        }.to_json
+        }
+      end
+
+      def info_section
+        {
+          type: "section",
+          text: {
+            type: "mrkdwn",
+            text: "I'm sorry but I can't understand you. How can I help you? Please, try one of these:"
+          }
+        }
+      end
+
+      def commands_section
+        {
+          type: "section",
+          text: {
+            type: "mrkdwn",
+            text: "*status `@username`* - displays a status of feedback request that was requested for specific user" \
+            "\n*list* - displays a list of feedback requests that you've received" \
+            "\n*request `@username` Message to be sent* - requests a feedback for specific user"
+          }
+        }
       end
     end
   end

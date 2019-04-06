@@ -139,3 +139,8 @@ resource "aws_api_gateway_deployment" "api_deployment" {
   rest_api_id = "${aws_api_gateway_rest_api.feedbot.id}"
   stage_name  = "prod"
 }
+
+resource "local_file" "output_values" {
+    content = "{\n  \"api_gateway_invoke_url\": \"${aws_api_gateway_deployment.api_deployment.invoke_url}\"\n}"
+    filename = "output.json"
+}

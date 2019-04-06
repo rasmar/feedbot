@@ -4,7 +4,7 @@ module Repos
   module Slack
     class Base
       def call
-        Net::HTTP.post(uri, payload, headers)
+        Net::HTTP.post(uri, payload.to_json, headers)
       end
 
       private
@@ -29,6 +29,12 @@ module Repos
         {
           "Content-Type" => "application/json",
           "Authorization" => "Bearer #{Settings.slack_token}"
+        }
+      end
+
+      def divider
+        {
+          type: "divider"
         }
       end
     end

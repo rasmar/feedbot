@@ -3,3 +3,5 @@ variables.tf
 temp/source.zip
 terraform.tfstate
 terraform.tfstate.backup
+output.json
+.vscode
