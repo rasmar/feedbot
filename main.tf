@@ -51,7 +51,9 @@ module "lambda" {
 
   #Lambda Environment variables
   environmentVariables = {
-    SLACK_ACCESS_TOKEN       = "${var.slack_access_token}"
+    SLACK_BOT_TOKEN          = "${var.slack_bot_token}"
+    SLACK_OAUTH_TOKEN        = "${var.slack_oauth_token}"
+    SLACK_LEADER_LABEL_ID    = "${var.slack_leader_label_id}"
     SALESFORCE_CLIENT_SECRET = "${var.salesforce_client_secret}"
     SALESFORCE_CLIENT_KEY    = "${var.salesforce_client_key}"
   }
