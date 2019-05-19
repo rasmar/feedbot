@@ -2,9 +2,8 @@
 
 module Events
   class SlackUnknownMessage
-    def initialize(channel, event)
+    def initialize(channel)
       @channel = channel
-      @event = event
     end
 
     def process

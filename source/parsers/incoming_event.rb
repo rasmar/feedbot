@@ -1,25 +1,25 @@
 # frozen_string_literal: true
 
 module Parsers
-  class IncomingEvent < OpenStruct
+  class IncomingEvent
+    def initialize(payload)
+      @payload = payload
+      @event = payload["event"]
+    end
+
     def parse
       if slack_event? && user
-        parse_slack_event
         slack_event
       elsif slack_event?
         Events::SlackBotMessage.new
-      else
-        Events::FormSubmit.new(attributes)
+      # else
+      #   Events::FormSubmit.new
       end
     end
 
     private
 
-    attr_reader :command, :requested_for, :message
-
-    def attributes
-      self.to_h
-    end
+    attr_reader :payload, :event
 
     def user
       @user ||= event["user"]
@@ -29,37 +29,40 @@ module Parsers
       @channel ||= event["channel"]
     end
 
-    def parse_slack_event
-      text = event["text"]
-      @command = text.match(/^[a-z]+/).to_s
-      @requested_for = text.match(/(?<=\w )[^ ]+/).to_s
-      @message = text.match(/^([^ ]+) ([^ ]+) (.*$)/)&.captures&.last
+    def command
+      @command ||= text.match(/^[^ ]+/).to_s.downcase
     end
 
     def slack_event?
-      !attributes[:team_id].nil?
+      payload["team_id"] || payload["team"]
     end
 
     def slack_event
-      case type
+      case payload["type"]
       when "event_callback"
         slack_message_callback_event
-      else
-        Events::SlackFeedbackConfirmation.new(attributes)
+      # when "block_actions"
+      #   Events::SlackFeedbackConfirmation.new
       end
     end
 
     def slack_message_callback_event
       case command
+      when "test_message"
+        Events::SlackTestMessage.new(channel, payload)
       when "request"
-        Events::SlackFeedbackRequest.new(channel, user, requested_for, message)
-      when "list"
-        Events::SlackFeedbackList.new(channel, user)
-      when "status"
-        Events::SlackStatusRequest.new(channel, user, requested_for)
+        Parsers::SlackFeedbackRequest.new(user, channel, text).parse
+      # when "list"
+      #   Events::SlackFeedbackList.new(channel, user)
+      # when "status"
+      #   Events::SlackStatusRequest.new(channel, user, requested_for)
       else
-        Events::SlackUnknownMessage.new(channel, event)
+        Events::SlackUnknownMessage.new(channel)
       end
+    end
+
+    def text
+      @text ||= event["text"]
     end
   end
 end

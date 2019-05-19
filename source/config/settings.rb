@@ -15,7 +15,15 @@ module Settings
     @salesforce_client_secret ||= ENV["SALESFORCE_CLIENT_SECRET"]
   end
 
-  def slack_token
-    @slack_token ||= ENV["SLACK_ACCESS_TOKEN"]
+  def slack_bot_token
+    @slack_bot_token ||= ENV["SLACK_BOT_TOKEN"]
+  end
+
+  def slack_oauth_token
+    @slack_oauth_token ||= ENV["SLACK_OAUTH_TOKEN"]
+  end
+
+  def slack_leader_label_id
+    @slack_leader_label_id ||= ENV["SLACK_LEADER_LABEL_ID"]
   end
 end
