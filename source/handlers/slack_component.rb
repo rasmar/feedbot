@@ -8,9 +8,7 @@ module FeedBot
       extend self
 
       def handle(event:, context:)
-        return { statusCode: 200, challenge: event["challenge"] } if event["challenge"]
-
-        event = Parsers::IncomingEvent.new(event).parse
+        event = Parsers::InteractiveEvent.new(event).parse
         event.process
         { statusCode: 200 }
       end
