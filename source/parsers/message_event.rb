@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Parsers
-  class IncomingEvent
+  class MessageEvent
     def initialize(payload)
       @payload = payload
       @event = payload["event"]
@@ -12,8 +12,6 @@ module Parsers
         slack_event
       elsif slack_event?
         Events::SlackBotMessage.new
-      # else
-      #   Events::FormSubmit.new
       end
     end
 
