@@ -11,6 +11,7 @@ module "dynamodb" {
 module "s3" {
   source = "modules/s3"
 }
+
 module "lambdas" {
   source                   = "modules/lambdas"
   slack_bot_token          = "${var.slack_bot_token}"
@@ -21,6 +22,7 @@ module "lambdas" {
   dynamodb_arn             = "${module.dynamodb.arn}"
   s3_bucket                = "${module.s3.bucket_id}"
 }
+
 module "api_gateway" {
   source          = "modules/api_gateway"
   feedbot_sc_name = "${module.lambdas.feedbot_sc_name}"

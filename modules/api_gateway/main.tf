@@ -6,6 +6,7 @@ resource "aws_api_gateway_rest_api" "feedbot" {
     types = ["REGIONAL"]
   }
 }
+
 resource "aws_lambda_permission" "lambdasc_permission" {
   statement_id  = "AllowLambdaSCExecution"
   action        = "lambda:InvokeFunction"
@@ -16,6 +17,7 @@ resource "aws_lambda_permission" "lambdasc_permission" {
   # within API Gateway REST API.
   source_arn = "${aws_api_gateway_rest_api.feedbot.execution_arn}/*/*/*"
 }
+
 resource "aws_lambda_permission" "lambdasm_permission" {
   statement_id  = "AllowLambdaSMExecution"
   action        = "lambda:InvokeFunction"
@@ -26,28 +28,33 @@ resource "aws_lambda_permission" "lambdasm_permission" {
   # within API Gateway REST API.
   source_arn = "${aws_api_gateway_rest_api.feedbot.execution_arn}/*/*/*"
 }
+
 resource "aws_api_gateway_resource" "slack_component" {
   rest_api_id = "${aws_api_gateway_rest_api.feedbot.id}"
   parent_id   = "${aws_api_gateway_rest_api.feedbot.root_resource_id}"
   path_part   = "slack_component"
 }
+
 resource "aws_api_gateway_resource" "slack_message" {
   rest_api_id = "${aws_api_gateway_rest_api.feedbot.id}"
   parent_id   = "${aws_api_gateway_rest_api.feedbot.root_resource_id}"
   path_part   = "slack_message"
 }
+
 resource "aws_api_gateway_method" "slack_component_post" {
   rest_api_id   = "${aws_api_gateway_rest_api.feedbot.id}"
   resource_id   = "${aws_api_gateway_resource.slack_component.id}"
   http_method   = "POST"
   authorization = "NONE"
 }
+
 resource "aws_api_gateway_method" "slack_message_post" {
   rest_api_id   = "${aws_api_gateway_rest_api.feedbot.id}"
   resource_id   = "${aws_api_gateway_resource.slack_message.id}"
   http_method   = "POST"
   authorization = "NONE"
 }
+
 resource "aws_api_gateway_integration" "slack_component_integration" {
   rest_api_id             = "${aws_api_gateway_rest_api.feedbot.id}"
   resource_id             = "${aws_api_gateway_resource.slack_component.id}"
@@ -64,6 +71,7 @@ resource "aws_api_gateway_integration" "slack_component_integration" {
 JSON
   }
 }
+
 resource "aws_api_gateway_integration" "slack_message_integration" {
   rest_api_id             = "${aws_api_gateway_rest_api.feedbot.id}"
   resource_id             = "${aws_api_gateway_resource.slack_message.id}"
@@ -72,6 +80,7 @@ resource "aws_api_gateway_integration" "slack_message_integration" {
   type                    = "AWS"
   uri                     = "arn:aws:apigateway:${var.aws_region}:lambda:path/2015-03-31/functions/${var.feedbot_sm_arn}/invocations"
 }
+
 resource "aws_api_gateway_method_response" "slack_component_response" {
   rest_api_id = "${aws_api_gateway_rest_api.feedbot.id}"
   resource_id = "${aws_api_gateway_resource.slack_component.id}"
@@ -79,6 +88,7 @@ resource "aws_api_gateway_method_response" "slack_component_response" {
   status_code = "200"
   response_models = { "application/json" = "Empty" }
 }
+
 resource "aws_api_gateway_method_response" "slack_message_response" {
   rest_api_id = "${aws_api_gateway_rest_api.feedbot.id}"
   resource_id = "${aws_api_gateway_resource.slack_message.id}"
@@ -86,6 +96,7 @@ resource "aws_api_gateway_method_response" "slack_message_response" {
   status_code = "200"
   response_models = { "application/json" = "Empty" }
 }
+
 resource "aws_api_gateway_integration_response" "slack_component_integration_response" {
   rest_api_id = "${aws_api_gateway_rest_api.feedbot.id}"
   resource_id = "${aws_api_gateway_resource.slack_component.id}"
@@ -96,6 +107,7 @@ resource "aws_api_gateway_integration_response" "slack_component_integration_res
     "aws_api_gateway_integration.slack_component_integration"
   ]
 }
+
 resource "aws_api_gateway_integration_response" "slack_message_integration_response" {
   rest_api_id = "${aws_api_gateway_rest_api.feedbot.id}"
   resource_id = "${aws_api_gateway_resource.slack_message.id}"
