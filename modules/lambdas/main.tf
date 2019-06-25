@@ -1,12 +1,13 @@
 resource "aws_lambda_function" "feedbot_sm" {
-  function_name = "feedbotsm"
-  role          = "${aws_iam_role.feedbot_role.arn}"
-  handler       = "handlers/slack_message.FeedBot::Handler::SlackMessage.handle"
-  s3_bucket     = "${var.s3_bucket}"
-  s3_key        = "source.zip"
-  runtime       = "ruby2.5"
-  timeout       = 30
-  description   = "feedBot slack component lambda"
+  function_name    = "feedbotsm"
+  role             = "${aws_iam_role.feedbot_role.arn}"
+  handler          = "handlers/slack_message.FeedBot::Handler::SlackMessage.handle"
+  s3_bucket        = "${var.s3_bucket}"
+  s3_key           = "source.zip"
+  runtime          = "ruby2.5"
+  timeout          = 30
+  description      = "feedBot slack component lambda"
+  source_code_hash = "${filebase64sha256("temp/source.zip")}"
 
   environment {
     variables = {
@@ -27,14 +28,15 @@ resource "aws_lambda_function" "feedbot_sm" {
 }
 
 resource "aws_lambda_function" "feedbot_sc" {
-  function_name = "feedbotsc"
-  role          = "${aws_iam_role.feedbot_role.arn}"
-  handler       = "handlers/slack_message.FeedBot::Handler::SlackComponent.handle"
-  s3_bucket     = "${var.s3_bucket}"
-  s3_key        = "source.zip"
-  runtime       = "ruby2.5"
-  timeout       = 30
-  description   = "feedBot slack component lambda"
+  function_name    = "feedbotsc"
+  role             = "${aws_iam_role.feedbot_role.arn}"
+  handler          = "handlers/slack_message.FeedBot::Handler::SlackComponent.handle"
+  s3_bucket        = "${var.s3_bucket}"
+  s3_key           = "source.zip"
+  runtime          = "ruby2.5"
+  timeout          = 30
+  description      = "feedBot slack component lambda"
+  source_code_hash = "${filebase64sha256("temp/source.zip")}"
 
   environment {
     variables = {
