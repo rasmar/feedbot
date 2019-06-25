@@ -8,3 +8,6 @@ push: pack terraform
 
 console:
 	pry -r ./bin/console.rb
+
+bundler:
+	bundle install --no-deployment --gemfile=./source/Gemfile && bundle install --deployment --gemfile=./source/Gemfile

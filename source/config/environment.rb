@@ -6,6 +6,7 @@ require "ostruct"
 require "securerandom"
 require "date"
 require "httparty"
+require "aws-sdk-dynamodb"
 
 require_relative "settings"
 require_relative "initializers/events"
