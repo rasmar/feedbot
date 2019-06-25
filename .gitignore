@@ -1,5 +1,5 @@
 .terraform
-variables.tf
+/variables.tf
 temp/source.zip
 terraform.tfstate
 terraform.tfstate.backup
