@@ -9,6 +9,7 @@ require "httparty"
 require "aws-sdk-dynamodb"
 
 require_relative "settings"
+require_relative "initializers/data_objects"
 require_relative "initializers/events"
 require_relative "initializers/parsers"
 require_relative "initializers/repos"
