@@ -9,13 +9,14 @@ module Parsers
     end
 
     def parse
+      return malformed_feedback_request if invalid_request?
+
       Events::SlackFeedbackRequest.new(
-        channel:   channel,
+        channel: channel,
         requester: requester,
-        target:    target,
-        mentions:  mentions,
-        form:      form,
-        message:   message
+        target: DataObjects::Mention.new(target),
+        ask: ask.map { |user| DataObjects::Mention.new(user) },
+        message: message
       )
     end
 
@@ -23,25 +24,28 @@ module Parsers
 
     attr_reader :requester, :channel, :text
 
-    def mentioned
-      @mentioned ||= text.scan(/(?<=<@)([^>]+)(?=>)/)&.flatten
+    def ask
+      @ask ||= ask_block.scan(/(?<=<@)\w+(?=>)/)
     end
 
-    def mentions
-      @mentions ||= mentioned[1..-1]
+    def ask_block
+      @ask_block ||= text.match(/(?<=ask:).+(?=(message:|for:))/).to_s
+    end
+
+    def invalid_request?
+      ask.empty? || target.empty? || message.empty?
+    end
+
+    def malformed_feedback_request
+      Events::SlackMalformedFeedbackRequest.new(channel)
     end
 
     def message
-      form_starting_point = /http/ =~ text
-      @message ||= text[(form_starting_point + form.length + 2)..-1]
+      @message ||= text.match(/(?<=message:).+\z/).to_s.lstrip
     end
 
     def target
-      @target ||= mentioned.first
-    end
-
-    def form
-      @form ||= text.match(/(?<=> <)http[^ >]+/).to_s
+      @target ||= text.match(/(?<=for:<@)\w+(?=>)/).to_s
     end
   end
 end

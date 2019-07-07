@@ -3,31 +3,20 @@
 module Repos
   module Slack
     class ProfileGet < Base
-      def initialize(event)
-        @event = event
+      def initialize(user)
+        @user = user.to_s
       end
 
       private
 
-      attr_reader :event
+      attr_reader :user
 
       def action
         "users.profile.get"
       end
 
-      def payload
-        {
-          blocks: [
-            info_section,
-            divider,
-            commands_section
-          ],
-          channel: channel
-        }.to_json
-      end
-
       def query
-        "user=#{event.target}"
+        "user=#{user}"
       end
 
       def request_method

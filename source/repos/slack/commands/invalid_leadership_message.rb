@@ -3,13 +3,14 @@
 module Repos
   module Slack
     class InvalidLeadershipMessage < Base
-      def initialize(event)
-        @event = event
+      def initialize(channel, target)
+        @channel = channel
+        @target = target
       end
 
       private
 
-      attr_reader :event
+      attr_reader :channel, :target
 
       def action
         "chat.postMessage"
@@ -17,9 +18,9 @@ module Repos
 
       def payload
         {
-          text: "I'm really sorry but <@#{event.target}> doesn't seem to have set you as a leader in the profile. " \
+          text: "I'm really sorry but #{target.decorate} doesn't seem to have set you as a leader in the profile. " \
           "I can't process your request unless your name is in the 'My Leader' field in target's profile.",
-          channel: event.channel
+          channel: channel
         }.to_json
       end
 

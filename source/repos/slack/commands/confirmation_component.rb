@@ -32,8 +32,7 @@ module Repos
           type: "section",
           text: {
             type: "mrkdwn",
-            text: "You are about to request feedback for <@#{event.target}>\n" \
-            "Form: #{event.form}\n\n" \
+            text: "You are about to request feedback for #{event.target.decorate}\n\n" \
             "Message: #{event.message}\n\n" \
             "Send to:\n#{send_to}"
           }
@@ -84,8 +83,8 @@ module Repos
 
       def send_to
         receivers = ""
-        event.mentions.each do |mention|
-          receivers += "- <@#{mention}>\n"
+        event.ask.each do |user|
+          receivers += "- #{user.decorate}\n"
         end
         receivers
       end
