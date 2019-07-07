@@ -19,9 +19,5 @@ module Services
     def send_confirmation_component
       Repos::Slack::ConfirmationComponent.new(event).call
     end
-
-    def request_id
-      SecureRandom.uuid
-    end
   end
 end

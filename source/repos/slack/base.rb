@@ -4,10 +4,20 @@ module Repos
   module Slack
     class Base
       def call
-        JSON.parse(send(request_method).body)
+        response = JSON.parse(send(request_method).body)
+        return_specific? ? specific_response(response) : response
       end
 
       private
+
+      def action_id_extractor(response, type, value = nil)
+        block = response.dig("message", "blocks").detect do |block|
+          block.key?("accessory") && block["accessory"]["type"] == type && block["accessory"]["value"] == value
+        end
+        return nil unless block.is_a?(Hash)
+
+        block["accessory"]["action_id"]
+      end
 
       def action
         raise NotImplemented
@@ -42,8 +52,16 @@ module Repos
         HTTParty.post(uri.to_s, body: payload, headers: headers)
       end
 
+      def request_id
+        @request_id ||= SecureRandom.uuid
+      end
+
       def request_method
         raise NotImplemented
+      end
+
+      def return_specific?
+        false
       end
 
       def uri

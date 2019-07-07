@@ -77,6 +77,10 @@ module Repos
         }
       end
 
+      def return_specific?
+        true
+      end
+
       def request_method
         :post
       end
@@ -88,6 +92,15 @@ module Repos
         end
         receivers
       end
+
+      def specific_response(response)
+        {
+          request_id: request_id,
+          datepicker_action_id: action_id_extractor(response, "datepicker"),
+          cancel_button_action_id: action_id_extractor(response, "button", "cancel_request")
+        }
+      end
+
 
       def token
         Settings.slack_bot_token
