@@ -21,6 +21,8 @@ module "lambdas" {
   salesforce_client_key    = "${var.salesforce_client_key}"
   dynamodb_arn             = "${module.dynamodb.arn}"
   s3_bucket                = "${module.s3.bucket_id}"
+  s3_key                   = "${module.s3.s3_key}"
+  s3_etag                  = "${module.s3.s3_etag}"
 }
 
 module "api_gateway" {

@@ -3,11 +3,11 @@ resource "aws_lambda_function" "feedbot_sm" {
   role             = "${aws_iam_role.feedbot_role.arn}"
   handler          = "handlers/slack_message.FeedBot::Handler::SlackMessage.handle"
   s3_bucket        = "${var.s3_bucket}"
-  s3_key           = "source.zip"
+  s3_key           = "${var.s3_key}"
   runtime          = "ruby2.5"
   timeout          = 30
   description      = "feedBot slack component lambda"
-  source_code_hash = "${filebase64sha256("temp/source.zip")}"
+  source_code_hash = "${var.s3_etag}"
 
   environment {
     variables = {
@@ -24,7 +24,7 @@ resource "aws_lambda_function" "feedbot_sm" {
     Project = "feedbot"
   }
 
-  depends_on = ["aws_iam_role.feedbot_role", "aws_iam_role_policy_attachment.feedbot", "aws_cloudwatch_log_group.feedbot_logs"]
+  depends_on = ["aws_iam_role.feedbot_role", "aws_iam_role_policy_attachment.feedbot", "aws_cloudwatch_log_group.feedbot_sm_logs"]
 }
 
 resource "aws_lambda_function" "feedbot_sc" {
@@ -32,11 +32,11 @@ resource "aws_lambda_function" "feedbot_sc" {
   role             = "${aws_iam_role.feedbot_role.arn}"
   handler          = "handlers/slack_message.FeedBot::Handler::SlackComponent.handle"
   s3_bucket        = "${var.s3_bucket}"
-  s3_key           = "source.zip"
+  s3_key           = "${var.s3_key}"
   runtime          = "ruby2.5"
   timeout          = 30
   description      = "feedBot slack component lambda"
-  source_code_hash = "${filebase64sha256("temp/source.zip")}"
+  source_code_hash = "${var.s3_etag}"
 
   environment {
     variables = {
@@ -53,7 +53,7 @@ resource "aws_lambda_function" "feedbot_sc" {
     Project = "feedbot"
   }
 
-  depends_on = ["aws_lambda_function.feedbot_sm"]
+  depends_on = ["aws_lambda_function.feedbot_sm", "aws_cloudwatch_log_group.feedbot_sc_logs"]
 }
 
 resource "aws_iam_role" "feedbot_role" {
@@ -76,8 +76,13 @@ resource "aws_iam_role" "feedbot_role" {
 EOF
 }
 
-resource "aws_cloudwatch_log_group" "feedbot_logs" {
-  name              = "/aws/lambda/feedbot"
+resource "aws_cloudwatch_log_group" "feedbot_sm_logs" {
+  name              = "/aws/lambda/feedbotsm"
+  retention_in_days = 14
+}
+
+resource "aws_cloudwatch_log_group" "feedbot_sc_logs" {
+  name              = "/aws/lambda/feedbotsc"
   retention_in_days = 14
 }
 

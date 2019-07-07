@@ -25,3 +25,11 @@ variable "dynamodb_arn" {
 variable "s3_bucket" {
   type = "string"
 }
+
+variable "s3_key" {
+  type = "string"
+}
+
+variable "s3_etag" {
+  type = "string"
+}
