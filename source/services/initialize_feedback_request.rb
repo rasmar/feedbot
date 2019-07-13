@@ -22,13 +22,14 @@ module Services
     
     def store_response(confirmation_response)
       Repos::Database::Base.new.put(
-        "RequestId" => confirmation_response[:id],
-        "Requester" => event.requester.to_s,
-        "Target" => event.target.to_s,
+        "MessageId" => confirmation_response[:id],
+        "RequesterId" => event.requester.to_s,
+        "TargetId" => event.target.to_s,
         "Ask" => event.ask.map(&:to_s),
         "Message" => event.message,
-        "DatepickerActionId" => confirmation_response[:datepicker_action_id],
-        "CancelButtonActionId" => confirmation_response[:cancel_button_action_id]
+        "Status" => "open",
+        "ActionId" => confirmation_response[:datepicker_action_id],
+        "CancelId" => confirmation_response[:cancel_button_action_id]
       )
     end
   end
