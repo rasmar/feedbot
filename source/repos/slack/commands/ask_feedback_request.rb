@@ -52,7 +52,7 @@ module Repos
             type: "button",
             text: {
               type: "plain_text",
-              text: "Confirm",
+              text: "Finished!",
               emoji: true
             },
             value: "confirm_request"

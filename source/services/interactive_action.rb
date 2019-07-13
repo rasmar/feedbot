@@ -13,8 +13,8 @@ module Services
       when "button"
         if request["CancelId"] == event.action["action_id"]
           cancel_request
-        else
-          true
+        elsif request["ActionId"] == event.action["action_id"]
+          complete_request
         end
       end
     end
@@ -31,6 +31,14 @@ module Services
     def confirm_request
       Services::FinalizeFeedbackRequest.new(request, event.action["selected_date"]).call
       Repos::Slack::ConfirmFeedbackRequest.new(
+        event.response_url,
+        DataObjects::Mention.new(request["TargetId"])
+      ).call
+    end
+
+    def complete_request
+      Services::CompleteFeedbackRequest.new(request).call
+      Repos::Slack::CompleteFeedbackRequest.new(
         event.response_url,
         DataObjects::Mention.new(request["TargetId"])
       ).call
