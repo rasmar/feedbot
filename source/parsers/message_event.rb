@@ -35,6 +35,10 @@ module Parsers
       payload["team_id"] || payload["team"]
     end
 
+    def status_user
+      @status_user ||= text.match(/(?<=status <@)\w+(?=>)/).to_s
+    end
+
     def slack_message_callback_event
       case command
       when "test_message"
@@ -43,6 +47,8 @@ module Parsers
         Parsers::SlackFeedbackRequest.new(user, channel, text).parse
       when "help"
         Events::SlackHelpMessage.new(channel)
+      when "status"
+        Events::SlackStatusMessage.new(user, channel, status_user)
       else
         Events::SlackUnknownMessage.new(channel)
       end

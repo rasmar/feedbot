@@ -18,7 +18,7 @@ module Repos
           },
           filter_expression: "#s IN (:v3, :v4)",
           key_condition_expression: "RequesterId = :v1 AND TargetId = :v2",
-          select: "ALL_ATTRIBUTES"
+          select: "ALL_PROJECTED_ATTRIBUTES"
         )&.items
       end
 

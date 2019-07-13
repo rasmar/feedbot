@@ -107,6 +107,16 @@ resource "aws_iam_policy" "feedbot_policy" {
       "Action": "dynamodb:*",
       "Resource": "${var.dynamodb_arn}",
       "Effect": "Allow"
+    },
+    {
+      "Action": "dynamodb:*",
+      "Resource": "${var.dynamodb_arn}/index/RequesterId-TargetId-index",
+      "Effect": "Allow"
+    },
+    {
+      "Action": "dynamodb:*",
+      "Resource": "${var.dynamodb_arn}/index/AskedId-Status-index",
+      "Effect": "Allow"
     }
   ]
 }

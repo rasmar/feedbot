@@ -20,8 +20,10 @@ module Repos
           type: "section",
           text: {
             type: "mrkdwn",
-            text: "*Request a feedback for specific user:*"\
-            "\nrequest for: @username ask: @user1 @user2 message: message to be sent"
+            text: "*Request a feedback for specific user:*\n"\
+            "request for: @user ask: @user1 @user2 message: message to be sent\n\n" \
+            "*Check feedback request status:*\n" \
+            "status @user"
           }
         }
       end

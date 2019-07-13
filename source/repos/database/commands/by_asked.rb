@@ -15,7 +15,7 @@ module Repos
             "#k1" => "Status"
           },
           key_condition_expression: "AskedId = :v1 AND #k1 = :v2",
-          select: "ALL_ATTRIBUTES"
+          select: "ALL_PROJECTED_ATTRIBUTES"
         ).items
       end
 
