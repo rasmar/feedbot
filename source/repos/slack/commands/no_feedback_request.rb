@@ -2,7 +2,7 @@
 
 module Repos
   module Slack
-    class InvalidLeadershipMessage < Base
+    class NoFeedbackRequest < Base
       def initialize(channel, target)
         @channel = channel
         @target = target
@@ -18,8 +18,8 @@ module Repos
 
       def payload
         {
-          text: "I'm really sorry but #{target.decorate} doesn't seem to have set you as a leader in the profile. " \
-          "I can't process your request unless your name is in the 'My Leader' field in target's profile.",
+          text: "\nIt seems that there is no ongoing feedback request for #{target.decorate}.\n" \
+          "You can create one by a `request` command. If you need help type `help` :help:",
           channel: channel
         }.to_json
       end

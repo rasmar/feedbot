@@ -2,15 +2,14 @@
 
 module Repos
   module Slack
-    class InvalidLeadershipMessage < Base
-      def initialize(channel, target)
+    class MalformedFeedbackRequest < Base
+      def initialize(channel)
         @channel = channel
-        @target = target
       end
 
       private
 
-      attr_reader :channel, :target
+      attr_reader :channel
 
       def action
         "chat.postMessage"
@@ -18,8 +17,9 @@ module Repos
 
       def payload
         {
-          text: "I'm really sorry but #{target.decorate} doesn't seem to have set you as a leader in the profile. " \
-          "I can't process your request unless your name is in the 'My Leader' field in target's profile.",
+          text: "\nI'm really sorry but your message was malformed. Proper format for a request:\n\n" \
+          "request for: @user ask: @user2 @user3 @user4 message: Feedback Message \n\n" \
+          "Please try again! :fingers_crossed: :slightly_smiling_face:",
           channel: channel
         }.to_json
       end

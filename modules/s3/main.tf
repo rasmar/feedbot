@@ -1,6 +1,16 @@
 resource "aws_s3_bucket" "feedbot_bucket" {
   bucket = "netguru-feedbot"
 
+  lifecycle_rule {
+    id      = "expire"
+    enabled = true
+    prefix  = ""
+
+    expiration {
+      days = 14
+    }
+  }
+
   tags {
     Project = "feedbot"
   }

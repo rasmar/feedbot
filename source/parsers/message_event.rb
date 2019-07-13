@@ -9,7 +9,7 @@ module Parsers
 
     def parse
       if slack_event? && user
-        slack_event
+        slack_message_callback_event
       elsif slack_event?
         Events::SlackBotMessage.new
       end
@@ -35,13 +35,8 @@ module Parsers
       payload["team_id"] || payload["team"]
     end
 
-    def slack_event
-      case payload["type"]
-      when "event_callback"
-        slack_message_callback_event
-      # when "block_actions"
-      #   Events::SlackFeedbackConfirmation.new
-      end
+    def status_user
+      @status_user ||= text.match(/(?<=status <@)\w+(?=>)/).to_s
     end
 
     def slack_message_callback_event
@@ -50,10 +45,10 @@ module Parsers
         Events::SlackTestMessage.new(channel, payload)
       when "request"
         Parsers::SlackFeedbackRequest.new(user, channel, text).parse
-      # when "list"
-      #   Events::SlackFeedbackList.new(channel, user)
-      # when "status"
-      #   Events::SlackStatusRequest.new(channel, user, requested_for)
+      when "help"
+        Events::SlackHelpMessage.new(channel)
+      when "status"
+        Events::SlackStatusMessage.new(user, channel, status_user)
       else
         Events::SlackUnknownMessage.new(channel)
       end

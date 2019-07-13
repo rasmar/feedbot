@@ -32,8 +32,7 @@ module Repos
           type: "section",
           text: {
             type: "mrkdwn",
-            text: "You are about to request feedback for <@#{event.target}>\n" \
-            "Form: #{event.form}\n\n" \
+            text: "You are about to request feedback for #{event.target.decorate}\n\n" \
             "Message: #{event.message}\n\n" \
             "Send to:\n#{send_to}"
           }
@@ -78,17 +77,30 @@ module Repos
         }
       end
 
+      def return_specific?
+        true
+      end
+
       def request_method
         :post
       end
 
       def send_to
         receivers = ""
-        event.mentions.each do |mention|
-          receivers += "- <@#{mention}>\n"
+        event.ask.each do |user|
+          receivers += "- #{user.decorate}\n"
         end
         receivers
       end
+
+      def specific_response(response)
+        {
+          id: message_timestamp(response),
+          datepicker_action_id: action_id_extractor(response, "datepicker"),
+          cancel_button_action_id: action_id_extractor(response, "button", "cancel_request")
+        }
+      end
+
 
       def token
         Settings.slack_bot_token

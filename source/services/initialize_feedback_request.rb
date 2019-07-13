@@ -7,36 +7,30 @@ module Services
     end
 
     def call
-      return invalid_leadership_message unless validate_leadership
+      return false unless Services::Leadership.new.validate_leadership(event.channel, event.requester, event.target)
 
-      # store_request
-      send_confirmation_component
+      store_response(send_confirmation_component)
     end
 
     private
 
     attr_reader :event
 
-    def invalid_leadership_message
-      Repos::Slack::InvalidLeadershipMessage.new(event).call
-    end
-
-    def validate_leadership
-      target_profile = Repos::Slack::ProfileGet.new(event).call
-      leader = target_profile.dig("profile", "fields", Settings.slack_leader_label_id, "value")
-      leader == event.requester
-    end
-
-    def store_request
-      Repos::Database::StoreRequest.new(event).call
-    end
-
     def send_confirmation_component
       Repos::Slack::ConfirmationComponent.new(event).call
     end
-
-    def request_id
-      SecureRandom.uuid
+    
+    def store_response(confirmation_response)
+      Repos::Database::Base.new.put(
+        "MessageId" => confirmation_response[:id],
+        "RequesterId" => event.requester.to_s,
+        "TargetId" => event.target.to_s,
+        "Ask" => event.ask.map(&:to_s),
+        "Message" => event.message,
+        "Status" => "open",
+        "ActionId" => confirmation_response[:datepicker_action_id],
+        "CancelId" => confirmation_response[:cancel_button_action_id]
+      )
     end
   end
 end
