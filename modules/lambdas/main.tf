@@ -30,7 +30,7 @@ resource "aws_lambda_function" "feedbot_sm" {
 resource "aws_lambda_function" "feedbot_sc" {
   function_name    = "feedbotsc"
   role             = "${aws_iam_role.feedbot_role.arn}"
-  handler          = "handlers/slack_message.FeedBot::Handler::SlackComponent.handle"
+  handler          = "handlers/slack_component.FeedBot::Handler::SlackComponent.handle"
   s3_bucket        = "${var.s3_bucket}"
   s3_key           = "${var.s3_key}"
   runtime          = "ruby2.5"

@@ -9,7 +9,7 @@ module Services
     def call
       return false unless Services::Leadership.new.validate_leadership(event.channel, event.requester, event.target)
 
-      send_confirmation_component
+      store_response(send_confirmation_component)
     end
 
     private
@@ -18,6 +18,18 @@ module Services
 
     def send_confirmation_component
       Repos::Slack::ConfirmationComponent.new(event).call
+    end
+    
+    def store_response(confirmation_response)
+      Repos::Database::Base.new.put(
+        "RequestId" => confirmation_response[:id],
+        "Requester" => event.requester.to_s,
+        "Target" => event.target.to_s,
+        "Ask" => event.ask.map(&:to_s),
+        "Message" => event.message,
+        "DatepickerActionId" => confirmation_response[:datepicker_action_id],
+        "CancelButtonActionId" => confirmation_response[:cancel_button_action_id]
+      )
     end
   end
 end

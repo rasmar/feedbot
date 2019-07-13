@@ -2,7 +2,7 @@
 
 module Repos
   module Slack
-    class UnknownMessage < Base
+    class Help < Base
       def initialize(channel)
         @channel = channel
       end
@@ -15,12 +15,13 @@ module Repos
         "chat.postMessage"
       end
 
-      def info_section
+      def commands_section
         {
           type: "section",
           text: {
             type: "mrkdwn",
-            text: "I'm sorry but I can't understand you. If you are lost please try typing `help`."
+            text: "*Request a feedback for specific user:*"\
+            "\nrequest for: @username ask: @user1 @user2 message: message to be sent"
           }
         }
       end
@@ -28,7 +29,7 @@ module Repos
       def payload
         {
           blocks: [
-            info_section,
+            commands_section
           ],
           channel: channel
         }.to_json

@@ -95,7 +95,7 @@ module Repos
 
       def specific_response(response)
         {
-          request_id: request_id,
+          id: message_timestamp(response),
           datepicker_action_id: action_id_extractor(response, "datepicker"),
           cancel_button_action_id: action_id_extractor(response, "button", "cancel_request")
         }

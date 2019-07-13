@@ -3,8 +3,7 @@
 module Parsers
   class InteractiveEvent
     def initialize(payload)
-      @payload = payload
-      @event = payload["event"]
+      @event = JSON.parse(URI.unescape(payload["body"].gsub(/\Apayload=/, "")))
     end
 
     def parse
@@ -13,6 +12,6 @@ module Parsers
 
     private
 
-    attr_reader :payload, :event
+    attr_reader :event
   end
 end

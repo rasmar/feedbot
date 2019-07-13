@@ -44,6 +44,10 @@ module Repos
         }
       end
 
+      def message_timestamp(response)
+        response["ts"]
+      end
+
       def payload
         raise NotImplemented
       end
@@ -81,3 +85,4 @@ require_relative "commands/profile_get"
 require_relative "commands/invalid_leadership_message"
 require_relative "commands/confirmation_component"
 require_relative "commands/malformed_feedback_request"
+require_relative "commands/help"
