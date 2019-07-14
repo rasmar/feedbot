@@ -71,10 +71,10 @@ module Repos
       def specific_response(response)
         {
           id: message_timestamp(response),
-          action_id: action_id_extractor(response, "button", "confirm_request")
+          action_id: action_id_extractor(response, "button", "confirm_request"),
+          channel: response["channel"]
         }
       end
-
 
       def token
         Settings.slack_bot_token

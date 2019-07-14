@@ -45,7 +45,7 @@ module Parsers
     end
 
     def target
-      @target ||= text.match(/(?<=for:<@)\w+(?=>)/).to_s
+      @target ||= text.match(/(?<=for: <@)\w+(?=>)/).to_s
     end
   end
 end

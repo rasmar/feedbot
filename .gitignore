@@ -8,3 +8,4 @@ output.json
 source/vendor
 source/.bundle
 .DS_Store
+.env
